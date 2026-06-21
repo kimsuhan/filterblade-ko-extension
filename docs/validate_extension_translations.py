@@ -7,6 +7,14 @@ ROOT = Path(__file__).resolve().parents[1]
 CONTENT_JS = ROOT / "filterblade-ko-extension" / "content.js"
 DICTIONARY_JSON = ROOT / "docs" / "poe2_item_name_dictionary.json"
 
+DISALLOWED_KOREAN_TERMS = {
+    "티어": "등급",
+    "가치 티어": "표시 등급",
+    "화폐 티어": "화폐 등급",
+    "고티어": "고등급",
+    "빔": "빛기둥",
+}
+
 
 def load_dictionary():
     data = json.loads(DICTIONARY_JSON.read_text(encoding="utf-8"))
@@ -41,15 +49,19 @@ def main():
     glossary = load_dictionary()
     conflicts = []
     covered = []
+    term_conflicts = []
 
     for english, korean in extract_literal_pairs():
         official = glossary.get(english)
-        if not official:
-            continue
-        if korean != official:
-            conflicts.append((english, korean, official))
-        else:
-            covered.append(english)
+        if official:
+            if korean != official:
+                conflicts.append((english, korean, official))
+            else:
+                covered.append(english)
+
+        for disallowed, preferred in DISALLOWED_KOREAN_TERMS.items():
+            if disallowed in korean:
+                term_conflicts.append((english, korean, disallowed, preferred))
 
     if conflicts:
         print("POE2DB item-name conflicts found:")
@@ -57,7 +69,14 @@ def main():
             print(f"- {english}: current={current!r}, official={official!r}")
         raise SystemExit(1)
 
+    if term_conflicts:
+        print("Korean UI term consistency conflicts found:")
+        for english, current, disallowed, preferred in term_conflicts:
+            print(f"- {english}: contains {disallowed!r}; use {preferred!r}. current={current!r}")
+        raise SystemExit(1)
+
     print(f"ok: {len(covered)} hard-coded item translations match POE2DB")
+    print("ok: Korean UI terminology is consistent")
 
 
 if __name__ == "__main__":

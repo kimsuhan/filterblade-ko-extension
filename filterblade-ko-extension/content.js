@@ -5,6 +5,24 @@
   const SKIP_TAGS = new Set(["SCRIPT", "STYLE", "NOSCRIPT", "TEXTAREA", "CODE", "PRE"]);
   const originalTextNodes = new WeakMap();
   const itemNameTranslations = new Map(Object.entries(window.POE2_KO_ITEM_NAMES || {}));
+  const uiTermTranslations = new Map(Object.entries({
+    "tier": "등급",
+    "tierlist": "등급표",
+    "value-tier": "표시 등급",
+    "currency tier": "화폐 등급",
+    "high tier currency": "상위 화폐",
+    "strictness": "엄격도",
+    "highlight": "강조 표시",
+    "beam": "빛기둥",
+    "map icon": "지도 아이콘",
+    "base type": "베이스 타입",
+    "crafting base": "제작 베이스",
+    "unique item": "고유 아이템",
+    "rare item": "희귀 아이템",
+    "magic item": "마법 아이템",
+    "waystone": "경로석",
+    "endgame": "엔드게임"
+  }));
 
   const exactTranslations = new Map(Object.entries({
     "FilterBlade": "FilterBlade",
@@ -39,7 +57,7 @@
     "More info": "자세히 보기",
     "here": "여기",
     "Your base filter": "기본 필터",
-    "Tierlists:": "티어 목록:",
+    "Tierlists:": "등급표:",
     "Softcore": "소프트코어",
     "Strictness:": "엄격도:",
     "Semi-Strict": "준엄격\nSemi-Strict",
@@ -154,9 +172,9 @@
     "RARE ITEM RANKING": "희귀 아이템 등급",
     "RINGS, AMULETS, BELTS": "반지, 목걸이, 허리띠",
     "ITEMLEVEL 82": "아이템 레벨 82",
-    "RARE & MAGIC ITEMS - HIGH TIER": "희귀 및 마법 아이템 - 고티어",
-    "HIGHER TIER: RARE": "상위 티어: 희귀",
-    "HIGHER TIER: MAGIC": "상위 티어: 마법",
+    "RARE & MAGIC ITEMS - HIGH TIER": "희귀 및 마법 아이템 - 고등급",
+    "HIGHER TIER: RARE": "상위 등급: 희귀",
+    "HIGHER TIER: MAGIC": "상위 등급: 마법",
     "OTHERS BASES": "기타 베이스",
     "OTHER BASES": "기타 베이스",
     "CRAFTING BASES": "제작 베이스",
@@ -214,17 +232,40 @@
     "MAPICON:": "지도 아이콘:",
     "Small Grey Circle": "작은 회색 원",
     "SMALL GREY CIRCLE": "작은 회색 원",
-    "Beam:": "빔:",
-    "BEAM:": "빔:",
+    "Small White Circle": "작은 흰색 원",
+    "SMALL WHITE CIRCLE": "작은 흰색 원",
+    "Small Blue Circle": "작은 파란색 원",
+    "Small Yellow Circle": "작은 노란색 원",
+    "Small Red Circle": "작은 빨간색 원",
+    "Small Green Circle": "작은 초록색 원",
+    "Medium White Circle": "중간 흰색 원",
+    "Large White Circle": "큰 흰색 원",
+    "Beam:": "빛기둥:",
+    "BEAM:": "빛기둥:",
     "White Temp": "임시 흰색",
     "WHITE TEMP": "임시 흰색",
+    "White": "흰색",
+    "WHITE": "흰색",
+    "Blue": "파란색",
+    "Yellow": "노란색",
+    "Red": "빨간색",
+    "Green": "초록색",
+    "Purple": "보라색",
+    "Orange": "주황색",
+    "Sound:": "사운드:",
+    "SOUND:": "사운드:",
+    "Click item to play sound": "아이템을 클릭하면 사운드를 재생합니다",
+    "CLICK ITEM TO PLAY SOUND": "아이템을 클릭하면 사운드를 재생합니다",
+    "Uber Plus Strict": "극엄격+1",
     "Current": "현재",
     "CURRENT": "현재",
-    "Tier 6": "티어 6",
-    "TIER 6": "티어 6",
+    "Tier 6": "등급 6",
+    "TIER 6": "등급 6",
+    "DETAILED EXPLANATION": "자세한 설명",
+    "Detailed Explanation": "자세한 설명",
     "BASED ON THIS RULE IN THE FILTER:": "필터의 이 규칙을 기준으로 표시:",
     "Based on this rule in the filter:": "필터의 이 규칙을 기준으로 표시:",
-    "CURRENCY TIER 6": "화폐 티어 6"
+    "CURRENCY TIER 6": "화폐 등급 6"
   }));
 
   const phraseTranslations = [
@@ -255,7 +296,7 @@
     ["Start customizing and head over to the 'Export to PoE' screen once you're done.", "커스터마이즈를 시작하고 완료되면 'PoE로 내보내기' 화면으로 이동하세요."],
     ["Start customizing and head over to the Advanced -> 'My Modules' once you're done.", "커스터마이즈를 시작하고 완료되면 고급 -> '내 모듈'로 이동하세요."],
     ["continuous automated updates & fixes", "지속적인 자동 업데이트 및 수정"],
-    ["economy updates for tierlists of uniques, currency, etc.", "유니크, 화폐 등의 티어 목록 경제 업데이트"],
+    ["economy updates for tierlists of uniques, currency, etc.", "유니크, 화폐 등의 등급표 경제 업데이트"],
     ["support a small development team", "소규모 개발팀 후원"],
     ["one-time upload to your PoE account", "PoE 계정에 1회 업로드"],
     ["no manual import required", "수동 가져오기 불필요"],
@@ -267,7 +308,7 @@
     ["FilterBlade is an online editor for loot-filters for the games Path of Exile 1 and 2 based on NeverSink's filters.", "FilterBlade는 NeverSink 필터를 기반으로 Path of Exile 1과 2의 아이템 필터를 편집하는 온라인 도구입니다."],
     ["The base NeverSink filter is already solid.", "기본 NeverSink 필터는 이미 충분히 탄탄합니다."],
     ["You can do a quick setup using the options above", "위 옵션으로 빠르게 설정할 수 있습니다"],
-    ["Edit every part of the filter: Colors, tierlists, sounds in a sorted structure.", "필터의 색상, 티어 목록, 사운드 등 모든 부분을 정리된 구조에서 편집하세요."],
+    ["Edit every part of the filter: Colors, tierlists, sounds in a sorted structure.", "필터의 색상, 등급표, 사운드 등 모든 부분을 정리된 구조에서 편집하세요."],
     ["Every edit done is automatically saved", "모든 편집은 자동 저장됩니다"],
     ["Head to the export screen to save the filter", "필터를 저장하려면 내보내기 화면으로 이동하세요"],
     ["download a filter-file or upload it directly into your PoE account", "필터 파일을 다운로드하거나 PoE 계정에 직접 업로드할 수 있습니다"],
@@ -301,22 +342,22 @@
     ["REGULAR", "일반\nNormal"],
     ["STRICT", "엄격\nStrict"],
     ["SOFT", "낮음\nSoft"],
-    ["Tiering based on current softcore economy. Updated every 4 hours.", "현재 소프트코어 경제를 기준으로 티어를 매깁니다. 4시간마다 갱신됩니다."],
-    ["Tiering based on last handmade update.", "마지막 수동 업데이트를 기준으로 티어를 매깁니다."],
-    ["All top value items have the same white background and drop-sound. They also come with a red beam and a huge red star on the minimap. These items include top tier currencies, valuable uniques, great divination cards, reliquary keys and everything else that is worth a LOT.", "최고가 아이템은 모두 흰색 배경과 같은 드롭 사운드를 사용합니다. 빨간 빔과 미니맵의 큰 빨간 별도 함께 표시됩니다. 최고 티어 화폐, 비싼 고유 아이템, 좋은 점술 카드, 성유물 보관실 열쇠처럼 가치가 매우 높은 아이템이 여기에 포함됩니다."],
-    ["There are hundreds of uniques! Some are in high demand, others are worthless or very niche. The filter can't distinguish between uniques with the same baseType. Bases with a blue or purple beam/map icon could potentially be very expensive.", "고유 아이템은 수백 가지입니다! 어떤 것은 수요가 높지만, 어떤 것은 가치가 낮거나 쓰임새가 아주 좁습니다. 필터는 같은 베이스 타입의 고유 아이템을 구분하지 못합니다. 파란색이나 보라색 빔/지도 아이콘이 붙은 베이스는 비싼 아이템일 수도 있습니다."],
-    ["The blue or purple map icons and beams signalize that are drop CAN be quite valuable... if you're lucky. A unique Leather Belt can very very rarely be an expensive headhunter and the filter can't tell them apart.", "파란색이나 보라색 지도 아이콘과 빔은 운이 좋으면 꽤 값진 드롭일 수 있다는 뜻입니다. 예를 들어 고유 가죽 허리띠는 아주 드물게 비싼 헤드헌터일 수 있지만, 필터는 둘을 구분하지 못합니다."],
-    ["Tablets and fragments have their own tierlist!", "서판과 조각은 별도의 티어 목록을 사용합니다!"],
+    ["Tiering based on current softcore economy. Updated every 4 hours.", "현재 소프트코어 경제를 기준으로 등급을 매깁니다. 4시간마다 갱신됩니다."],
+    ["Tiering based on last handmade update.", "마지막 수동 업데이트를 기준으로 등급을 매깁니다."],
+    ["All top value items have the same white background and drop-sound. They also come with a red beam and a huge red star on the minimap. These items include top tier currencies, valuable uniques, great divination cards, reliquary keys and everything else that is worth a LOT.", "최고가 아이템은 모두 흰색 배경과 같은 드롭 사운드를 사용합니다. 빨간 빛기둥과 미니맵의 큰 빨간 별도 함께 표시됩니다. 최고 등급 화폐, 비싼 고유 아이템, 좋은 점술 카드, 성유물 보관실 열쇠처럼 가치가 매우 높은 아이템이 여기에 포함됩니다."],
+    ["There are hundreds of uniques! Some are in high demand, others are worthless or very niche. The filter can't distinguish between uniques with the same baseType. Bases with a blue or purple beam/map icon could potentially be very expensive.", "고유 아이템은 수백 가지입니다! 어떤 것은 수요가 높지만, 어떤 것은 가치가 낮거나 쓰임새가 아주 좁습니다. 필터는 같은 베이스 타입의 고유 아이템을 구분하지 못합니다. 파란색이나 보라색 빛기둥/지도 아이콘이 붙은 베이스는 비싼 아이템일 수도 있습니다."],
+    ["The blue or purple map icons and beams signalize that are drop CAN be quite valuable... if you're lucky. A unique Leather Belt can very very rarely be an expensive headhunter and the filter can't tell them apart.", "파란색이나 보라색 지도 아이콘과 빛기둥은 운이 좋으면 꽤 값진 드롭일 수 있다는 뜻입니다. 예를 들어 고유 가죽 허리띠는 아주 드물게 비싼 헤드헌터일 수 있지만, 필터는 둘을 구분하지 못합니다."],
+    ["Tablets and fragments have their own tierlist!", "서판과 조각은 별도의 등급표를 사용합니다!"],
     ["Breach and delirium splinters increase their highlight with stack size", "균열 및 환영 파편은 중첩 개수가 많을수록 강조 표시가 강해집니다."],
     ["Uncut skill gems are highlighted based on the arealevel and their gemlevel. You'll see them clearly during the campaign. In the endgame high level ones receive extra highlight!", "미가공 스킬 젬은 지역 레벨과 젬 레벨에 따라 강조됩니다. 캠페인 중에는 뚜렷하게 보이고, 엔드게임에서는 높은 레벨 젬이 한 번 더 강조됩니다!"],
-    ["Waystones gain more highlight as they gain tiers. High tier (11+) and top tier (16) Waystones have different sounds. The filter highlights waystone tier upgrades with an extra color.", "경로석은 등급이 오를수록 더 눈에 띄게 표시됩니다. 고티어(11+)와 최고 티어(16) 경로석은 서로 다른 사운드를 사용합니다. 등급이 오른 경로석은 별도 색상으로 구분됩니다."],
+    ["Waystones gain more highlight as they gain tiers. High tier (11+) and top tier (16) Waystones have different sounds. The filter highlights waystone tier upgrades with an extra color.", "경로석은 등급이 오를수록 더 눈에 띄게 표시됩니다. 고등급(11+)과 최고 등급(16) 경로석은 서로 다른 사운드를 사용합니다. 등급이 오른 경로석은 별도 색상으로 구분됩니다."],
     ["The filter highlights Waystones drops of a higher tier than the one you're in with extra highlight (disabled on some styles)", "현재 진행 중인 등급보다 높은 경로석은 추가로 강조합니다. 일부 스타일에서는 꺼져 있을 수 있습니다."],
     ["As you enter higher waystones new basetypes can drop. The filter will automatically highlight lower level basetypes less. The 3 basetypes on the left side have the levels 65-70-80. The higher level bow is less useful by comparison to other available basetypes", "더 높은 경로석에 들어가면 새로운 베이스 타입이 드롭됩니다. 필터는 낮은 레벨 베이스 타입의 강조를 자동으로 줄입니다. 왼쪽의 세 베이스 타입은 각각 레벨 65-70-80입니다. 레벨이 높은 활이라도 다른 베이스 타입과 비교하면 덜 쓸모 있을 수 있습니다."],
     ["The filter has a ranking system for all gear-basetypes. Better basetypes receive more highlight, while worse ones are hidden on higher strictnesses (NOTE: transparency rendering is a bit weird on filterblade, works better ingame).", "필터는 모든 장비 베이스 타입에 등급을 매깁니다. 좋은 베이스 타입은 더 눈에 띄게 표시하고, 낮은 베이스 타입은 높은 엄격도에서 숨깁니다. 참고: FilterBlade에서는 투명도 표시가 조금 어색할 수 있지만, 게임 안에서는 더 잘 보입니다."],
     ["Jewellery has a ranking of it's own and distinct highlight and strictness progression", "장신구는 별도의 등급 체계가 있고, 강조 방식과 엄격도 진행도 따로 적용됩니다."],
     ["Itemlevel 82 rares are capable of rolling the best available mods. These are highlighted by a slightly orange hue.", "아이템 레벨 82 희귀 아이템에는 최고 등급 속성이 붙을 수 있습니다. 이 아이템은 살짝 주황빛으로 표시됩니다."],
-    ["Rare & Magic items can drop with a higher 'tier'. The tier affects the initially rolled mods. Higher tier items are strongly biased to have higher mod values. Non-tiered items CAN be just as good, but are way less likely to be so.", "희귀 및 마법 아이템은 더 높은 '티어'로 드롭될 수 있습니다. 티어는 처음 붙는 속성에 영향을 줍니다. 티어가 높을수록 높은 속성값이 붙기 쉽습니다. 티어가 없는 아이템도 좋을 수는 있지만 그럴 가능성은 훨씬 낮습니다."],
-    ["Higher tier magic items can make for valuable crafting bases. Keep in mind that the 'tier' only affects the initially rolled mods, not further crafting results.", "상위 티어 마법 아이템은 좋은 제작 베이스가 될 수 있습니다. 단, '티어'는 처음 붙은 속성에만 영향을 주며 이후 제작 결과에는 영향을 주지 않습니다."],
+    ["Rare & Magic items can drop with a higher 'tier'. The tier affects the initially rolled mods. Higher tier items are strongly biased to have higher mod values. Non-tiered items CAN be just as good, but are way less likely to be so.", "희귀 및 마법 아이템은 더 높은 '등급'으로 드롭될 수 있습니다. 등급은 처음 붙는 속성에 영향을 줍니다. 등급이 높을수록 높은 속성값이 붙기 쉽습니다. 등급이 없는 아이템도 좋을 수는 있지만 그럴 가능성은 훨씬 낮습니다."],
+    ["Higher tier magic items can make for valuable crafting bases. Keep in mind that the 'tier' only affects the initially rolled mods, not further crafting results.", "상위 등급 마법 아이템은 좋은 제작 베이스가 될 수 있습니다. 단, '등급'은 처음 붙은 속성에만 영향을 주며 이후 제작 결과에는 영향을 주지 않습니다."],
     ["Useful normal and magic bases get highlighted in the endgame in order to attempt craft them up. ItemLevel 82 (highest relevant itemlevel) bases also have an orange border.", "엔드게임에서는 제작해 볼 만한 일반 및 마법 베이스가 강조됩니다. 아이템 레벨 82(실질적으로 중요한 최고 아이템 레벨) 베이스에는 주황색 테두리도 붙습니다."],
     ["By applying an 'Orb of Chance' on these bases, you have a tiny chance to turn it into valuable unique item.", "이 베이스에 '기회의 오브'를 사용하면 아주 낮은 확률로 값진 고유 아이템이 될 수 있습니다."],
     ["Jewels in PoE2 can be quite valuable and come with lucrative corruption options. The filter highlights this appropriately.", "PoE2의 주얼은 꽤 비쌀 수 있고, 쓸 만한 타락 옵션도 붙습니다. 필터는 이런 주얼을 알맞게 강조합니다."],
@@ -333,7 +374,23 @@
     ["Recommended for endgame waystone farming. Hides most inefficient rares, crafting bases.", "엔드게임 경로석 파밍에 추천합니다. 효율이 낮은 희귀 아이템과 제작 베이스 대부분을 숨깁니다."],
     ["Hides regular transmutation and augmentation orbs in the endgame", "엔드게임에서는 일반 진화의 오브와 확장의 오브를 숨깁니다."],
     ["Endgame farming: T15+ waystones only. Hides alchemy-grade currencies. Designed for high-juiced gameplay.", "엔드게임 파밍용입니다. T15+ 경로석만 기준으로 하며, 연금술 등급 화폐를 숨깁니다. 고투자 플레이에 맞춰 설계되었습니다."],
-    ["WARNING: Hides waystone tiers 1-14. Will hide many boss-drop-uniques to minimize clutter in maps. Check hidden items when bossing. Hides lower-currency tiers", "경고: 1-14등급 경로석을 숨깁니다. 지도에서 잡동사니 표시를 줄이기 위해 보스 드롭 고유 아이템도 많이 숨길 수 있습니다. 보스를 잡을 때는 숨겨진 아이템을 확인하세요. 낮은 티어 화폐도 숨깁니다."]
+    ["WARNING: Hides waystone tiers 1-14. Will hide many boss-drop-uniques to minimize clutter in maps. Check hidden items when bossing. Hides lower-currency tiers", "경고: 1-14등급 경로석을 숨깁니다. 지도에서 잡동사니 표시를 줄이기 위해 보스 드롭 고유 아이템도 많이 숨길 수 있습니다. 보스를 잡을 때는 숨겨진 아이템을 확인하세요. 낮은 등급 화폐도 숨깁니다."],
+    ["Basic supplies for early game crafting operations. Wisdoms can be purchased from vendors for 25 gold each, so they're hidden in the endgame", "초반 제작에 쓰이는 기본 재료입니다.\n감정 주문서는 상점에서 개당 25골드에 살 수 있어서 엔드게임에서는 숨깁니다."],
+    ["The filter has individual rules for the campaign section of the game.", "필터에는 캠페인 구간용 개별 규칙이 따로 있습니다."],
+    ["Every time you pick up an item, you have to stop. Optimized characters are better off focusing on the good drops and ignoring the plethora of cheap drops. As your character becomes more optimized, increasing the strictness level of the filter is advised.", "아이템을 주울 때마다 이동을 멈춰야 합니다.\n세팅이 갖춰진 캐릭터라면 값싼 드롭을 일일이 줍기보다 좋은 드롭에 집중하는 편이 낫습니다.\n캐릭터가 더 강해질수록 필터 엄격도를 올리는 것을 추천합니다."],
+    ["Basic supplies for early game crafting operations.", "초반 제작에 쓰이는 기본 재료입니다."],
+    ["Wisdoms can be purchased from vendors for 25 gold each, so they're hidden in the endgame", "감정 주문서는 상점에서 개당 25골드에 살 수 있어서 엔드게임에서는 숨깁니다."],
+    ["Every time you pick up an item, you have to stop.", "아이템을 주울 때마다 이동을 멈춰야 합니다."],
+    ["Optimized characters are better off focusing on the good drops and ignoring the plethora of cheap drops.", "세팅이 갖춰진 캐릭터라면 값싼 드롭을 일일이 줍기보다 좋은 드롭에 집중하는 편이 낫습니다."],
+    ["As your character becomes more optimized, increasing the strictness level of the filter is advised.", "캐릭터가 더 강해질수록 필터 엄격도를 올리는 것을 추천합니다."],
+    ["The site is updated every 4 hours and the tiering of the items may differ. Items might change their tier based on high or low demand. Note that you have to redownload/sync the filter to get the latest economy data!", "사이트는 4시간마다 업데이트되며 아이템 등급이 달라질 수 있습니다. 수요가 높거나 낮아지면 아이템 등급도 바뀔 수 있습니다. 최신 경제 데이터를 반영하려면 필터를 다시 다운로드하거나 동기화해야 합니다!"],
+    ["Don't underrate chance orbs! You can buy Waystones from vendors at the start of the league to quickly progress through the atlas!", "기회의 오브를 과소평가하지 마세요! 리그 초반에는 상점에서 경로석을 구매해 아틀라스를 빠르게 진행할 수 있습니다!"],
+    ["Alterations, jeweller's and chromatics can also be reliably obtained by doing vendor recipes.", "변화의 오브, 쥬얼러 오브, 색채의 오브도 상점 판매 조합으로 안정적으로 얻을 수 있습니다."],
+    ["Items have a sound that is linked to their value-tier. All high tier currencies make the same sound. When you hear it - you know 'something dropped'. You can click on the currency preview to hear the sound", "아이템에는 표시 등급에 맞는 사운드가 연결되어 있습니다. 모든 상위 화폐는 같은 사운드를 사용합니다. 이 소리가 들리면 '뭔가 떨어졌다'고 바로 알 수 있습니다. 화폐 미리보기를 클릭하면 사운드를 들어볼 수 있습니다."],
+    ["They also come with a minimap-icon. The icons can be seen next to the item preview labels on FilterBlade.", "미니맵 아이콘도 함께 표시됩니다. 아이콘은 FilterBlade의 아이템 미리보기 라벨 옆에서 확인할 수 있습니다."],
+    ["You can change all of these settings in the customizer screen here. To quickly jump to the settings for a certain item, right click the item label or CTRL+click the item.", "이 설정은 모두 여기의 커스터마이저 화면에서 바꿀 수 있습니다. 특정 아이템 설정으로 바로 이동하려면 아이템 라벨을 우클릭하거나 Ctrl+클릭하세요."],
+    ["The blue or purple map icons and beams signalize that are drop CAN be quite valuable...", "파란색 또는 보라색 지도 아이콘과 빛기둥은 운이 좋으면 꽤 값진 드롭일 수 있다는 뜻입니다..."],
+    ["A unique Leather Belt can very very rarely be an expensive headhunter and the filter can't tell them apart.", "고유 가죽 허리띠는 아주 드물게 비싼 헤드헌터일 수 있지만, 필터는 둘을 구분하지 못합니다."]
   ];
 
   const regexTranslations = [
@@ -343,12 +400,19 @@
     [/^Class:\s*(.+)$/i, (match, itemClass) => `분류: ${translateItemClass(itemClass)}`],
     [/^BaseType:\s*(.+)$/i, (match, baseType) => `베이스 타입: ${translateItemOrExact(baseType)}`],
     [/^Hidden starting with (.+)$/i, (match, strictness) => `${translateItemOrExact(strictness)}부터 숨김`],
-    [/^Currency Tier (\d+)$/i, (match, tier) => `화폐 티어 ${tier}`]
+    [/^MapIcon:\s*(.+)$/i, (match, mapIcon) => `지도 아이콘: ${translateItemOrExact(mapIcon)}`],
+    [/^Beam:\s*(.+)$/i, (match, beam) => `빛기둥: ${translateItemOrExact(beam)}`],
+    [/^Sound:\s*(.+)$/i, (match, sound) => `사운드: ${sound}`],
+    [/^Currency Tier (\d+)$/i, (match, tier) => `화폐 등급 ${tier}`]
   ];
 
   function translateItemOrExact(value) {
     const trimmed = value.trim();
-    return itemNameTranslations.get(trimmed) ?? exactTranslations.get(trimmed) ?? trimmed;
+    return itemNameTranslations.get(trimmed)
+      ?? exactTranslations.get(trimmed)
+      ?? exactTranslations.get(trimmed.toUpperCase())
+      ?? uiTermTranslations.get(trimmed.toLowerCase())
+      ?? trimmed;
   }
 
   function translateItemClass(value) {
@@ -366,26 +430,44 @@
     return classes[normalized] ?? translateItemOrExact(value);
   }
 
+  function applySentenceLineBreaks(value) {
+    return value.replace(/([.!?])\s+(?=\S)/g, "$1\n");
+  }
+
+  function shouldApplySentenceLineBreaks(value) {
+    const trimmed = value.trim();
+    if (!/[.!?]\s+\S/.test(trimmed)) return false;
+    if (/^(분류|베이스 타입|지도 아이콘|빛기둥|사운드|화폐 등급|숨김 시작 엄격도):/i.test(trimmed)) {
+      return false;
+    }
+    if (trimmed.length < 45) return false;
+    return true;
+  }
+
+  function formatTranslation(value) {
+    return shouldApplySentenceLineBreaks(value) ? applySentenceLineBreaks(value) : value;
+  }
+
   function translateText(value) {
     const trimmed = value.trim();
     if (!trimmed) return value;
 
     const exact = translateItemOrExact(trimmed);
     if (exact !== trimmed) {
-      return value.replace(trimmed, exact);
+      return value.replace(trimmed, formatTranslation(exact));
     }
 
     for (const [pattern, replacer] of regexTranslations) {
       const regexMatch = trimmed.match(pattern);
       if (regexMatch) {
-        return value.replace(trimmed, replacer(...regexMatch));
+        return value.replace(trimmed, formatTranslation(replacer(...regexMatch)));
       }
     }
     let translated = value;
     for (const [source, target] of phraseTranslations) {
       translated = translated.replaceAll(source, target);
     }
-    return translated;
+    return formatTranslation(translated);
   }
 
   function restoreElement(element) {

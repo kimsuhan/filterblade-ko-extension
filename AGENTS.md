@@ -11,3 +11,4 @@
 ```
 
 - 확장 프로그램에서는 `filterblade-ko-extension/poe2-item-names.js`의 사전 번역이 수동 UI 번역보다 우선되어야 한다.
+- 반복 UI 용어는 `docs/translation_terms.json`을 기준으로 통일한다. 특히 `beam`은 `빛기둥`, `tier`는 `등급`, `value-tier`는 `표시 등급`, `currency tier`는 `화폐 등급`으로 번역한다.

@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "FilterBlade 한국어 번역",
   "description": "FilterBlade PoE2 페이지의 주요 UI 문구를 한국어로 번역합니다.",
-  "version": "0.2.8",
+  "version": "0.2.16",
   "action": {
     "default_title": "FilterBlade 한국어 번역",
     "default_popup": "popup.html"

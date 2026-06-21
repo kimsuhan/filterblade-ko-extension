@@ -1,0 +1,20 @@
+{
+  "tier": "등급",
+  "tierlist": "등급표",
+  "value-tier": "표시 등급",
+  "currency tier": "화폐 등급",
+  "high tier currency": "상위 화폐",
+  "mid-tier currency": "중간급 화폐",
+  "rare currency": "희귀 화폐",
+  "strictness": "엄격도",
+  "highlight": "강조 표시",
+  "beam": "빛기둥",
+  "map icon": "지도 아이콘",
+  "base type": "베이스 타입",
+  "crafting base": "제작 베이스",
+  "unique item": "고유 아이템",
+  "rare item": "희귀 아이템",
+  "magic item": "마법 아이템",
+  "waystone": "경로석",
+  "endgame": "엔드게임"
+}
