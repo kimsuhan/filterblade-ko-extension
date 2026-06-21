@@ -1,14 +1,83 @@
 # AGENTS.md
 
-## 작업 지침
+## Project Goal
 
-- FilterBlade 번역에서 Path of Exile 2 아이템명은 반드시 `docs/poe2_item_name_dictionary.json`의 POE2DB 공식 한국어명을 기준으로 한다.
-- 새 아이템명 번역을 수동으로 추가하기 전에 먼저 사전에 같은 영문명이 있는지 확인한다.
-- 수동 번역을 추가하거나 수정한 뒤에는 아래 검사를 실행해 POE2DB 사전과 충돌하지 않는지 확인한다.
+This repository contains a Chrome extension that translates the FilterBlade Path of Exile 2 UI into Korean.
+
+The extension should prioritize practical readability for Korean PoE2 players while preserving official item names and filter-rule meaning.
+
+## Core Translation Rules
+
+- Path of Exile 2 item names must follow `docs/poe2_item_name_dictionary.json`.
+- The generated extension dictionary `filterblade-ko-extension/poe2-item-names.js` must remain higher priority than hand-written UI translations.
+- Before adding a hand-written item translation, check whether the English name already exists in the POE2DB-based dictionary.
+- Do not translate filter syntax or debug-like rule code when it is shown as raw rule details, such as `SetFontSize`, `SetTextColor`, `BaseType == ...`, `Entry ID`, or `Priority`.
+- Translate user-facing labels, cards, hover tooltips, and guidance text.
+
+## Terminology
+
+Use `docs/translation_terms.json` as the source of truth for repeated UI terms.
+
+Important fixed terms:
+
+- `beam` -> `빛기둥`
+- `tier` -> `등급`
+- `tierlist` -> `등급표`
+- `value-tier` -> `표시 등급`
+- `currency tier` -> `화폐 등급`
+- `strictness` -> `엄격도`
+- `highlight` -> `강조 표시`
+- `map icon` -> `지도 아이콘`
+- `base type` -> `베이스 타입`
+- `crafting base` -> `제작 베이스`
+- `unique item` -> `고유 아이템`
+- `rare item` -> `희귀 아이템`
+- `magic item` -> `마법 아이템`
+
+Avoid reintroducing older inconsistent terms such as `빔`, `티어`, `가치 티어`, or `화폐 티어`.
+
+## UI Behavior
+
+- Strictness labels should use two lines when helpful, for example Korean on the first line and the English label on the second line.
+- Long translated explanations should add line breaks after sentence endings for readability.
+- Short metadata lines should not be force-broken. Examples: `분류`, `베이스 타입`, `지도 아이콘`, `빛기둥`, `사운드`, `화폐 등급`.
+- Tooltip text can be split into multiple DOM text nodes. Add translations for both full sentences and smaller label/value fragments when needed.
+- Be careful with partial replacements. Do not allow short words like `here` to alter unrelated words such as `There`.
+
+## Validation
+
+After changing translations, run:
 
 ```powershell
-& 'C:\Users\k_yak\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe' docs\validate_extension_translations.py
+python docs/validate_extension_translations.py
 ```
 
-- 확장 프로그램에서는 `filterblade-ko-extension/poe2-item-names.js`의 사전 번역이 수동 UI 번역보다 우선되어야 한다.
-- 반복 UI 용어는 `docs/translation_terms.json`을 기준으로 통일한다. 특히 `beam`은 `빛기둥`, `tier`는 `등급`, `value-tier`는 `표시 등급`, `currency tier`는 `화폐 등급`으로 번역한다.
+The validation must pass both checks:
+
+- hard-coded item translations match the POE2DB dictionary
+- Korean UI terminology is consistent
+
+Also run a JavaScript syntax check on changed extension scripts when possible:
+
+```powershell
+node --check filterblade-ko-extension/content.js
+node --check filterblade-ko-extension/poe2-item-names.js
+```
+
+## Updating The Item Dictionary
+
+- Use `docs/build_poe2db_item_dictionary.py` to rebuild the POE2DB item-name dictionary.
+- The dictionary is for names only. Do not add item stats, requirements, or long descriptions.
+- If POE2DB has unavailable pages, document the skipped categories in `docs/README.md`.
+- Regenerate `filterblade-ko-extension/poe2-item-names.js` from `docs/poe2_item_name_dictionary.json` after dictionary updates.
+
+## Extension Versioning
+
+- Bump `filterblade-ko-extension/manifest.json` whenever extension behavior or translations change.
+- Keep the version increment small and sequential.
+
+## Git Hygiene
+
+- Keep `_workspace/` ignored; it is for local analysis artifacts.
+- Do not commit local machine absolute paths.
+- Before committing, check the working tree and validation results.
