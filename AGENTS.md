@@ -18,23 +18,7 @@ The extension should prioritize practical readability for Korean PoE2 players wh
 
 Use `docs/translation_terms.json` as the source of truth for repeated UI terms.
 
-Important fixed terms:
-
-- `beam` -> `빛기둥`
-- `tier` -> `등급`
-- `tierlist` -> `등급표`
-- `value-tier` -> `표시 등급`
-- `currency tier` -> `화폐 등급`
-- `strictness` -> `엄격도`
-- `highlight` -> `강조 표시`
-- `map icon` -> `지도 아이콘`
-- `base type` -> `베이스 타입`
-- `crafting base` -> `제작 베이스`
-- `unique item` -> `고유 아이템`
-- `rare item` -> `희귀 아이템`
-- `magic item` -> `마법 아이템`
-
-Avoid reintroducing older inconsistent terms such as `빔`, `티어`, `가치 티어`, or `화폐 티어`.
+Do not duplicate the term list in this file. Update `docs/translation_terms.json` when terminology changes, then run the validation script.
 
 ## UI Behavior
 
